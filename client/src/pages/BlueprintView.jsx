@@ -156,9 +156,9 @@ const BlueprintView = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                     <div>
-                        <Link to="/saved" style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontWeight: 700, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none' }}><ArrowLeft size={16}/> LIBRARY</Link>
+                        <Link to="/saved" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> LIBRARY</Link>
                         <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1 }}>{blueprint.title}</h1>
-                        <p style={{ fontSize: '18px', color: '#6b7280', marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
+                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <button onClick={handleDelete} className="option-btn" style={{ padding: '12px 24px', color: '#ef4444', borderColor: '#fee2e2' }}><Trash2 size={18}/></button>
@@ -183,16 +183,16 @@ const BlueprintView = () => {
                                     ))}
                                 </div>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                                 <div>
-                                    <div style={{ color: '#3b82f6', fontWeight: 700, fontSize: '12px', marginBottom: '12px' }}>SHOULD HAVE</div>
-                                    {blueprint.core_features?.should_have?.map((f, i) => (
-                                        <div key={i} style={{ fontSize: '14px', color: '#4b5563', marginBottom: '8px' }}>• {f}</div>
+                                    <div style={{ color: '#2563eb', fontWeight: 800, fontSize: '12px', marginBottom: '12px', letterSpacing: '0.05em' }}>SHOULD HAVE</div>
+                                    {(blueprint.core_features?.should_have || []).map((f, i) => (
+                                        <div key={i} style={{ fontSize: '14px', color: '#111827', fontWeight: 500, marginBottom: '8px' }}>• {f}</div>
                                     ))}
                                 </div>
                                 <div>
-                                    <div style={{ color: '#8b5cf6', fontWeight: 700, fontSize: '12px', marginBottom: '12px' }}>INNOVATION</div>
-                                    <p style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.5 }}>{blueprint.what_is_new}</p>
+                                    <div style={{ color: '#7c3aed', fontWeight: 800, fontSize: '12px', marginBottom: '12px', letterSpacing: '0.05em' }}>INNOVATION</div>
+                                    <p style={{ fontSize: '14px', color: '#111827', fontWeight: 500, lineHeight: 1.5 }}>{blueprint.what_is_new}</p>
                                 </div>
                             </div>
                         </div>
@@ -204,9 +204,9 @@ const BlueprintView = () => {
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 {Object.entries(blueprint.roadmap_4_weeks || {}).map(([week, task], i) => (
-                                    <div key={week} style={{ padding: '20px', background: '#f9fafb', borderRadius: '16px' }}>
-                                        <div style={{ fontWeight: 800, fontSize: '12px', color: '#9ca3af', marginBottom: '8px' }}>WEEK {i+1}</div>
-                                        <p style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.5 }}>{task}</p>
+                                    <div key={week} style={{ padding: '20px', background: '#f9fafb', borderRadius: '16px', border: '1px solid #f3f4f6' }}>
+                                        <div style={{ fontWeight: 800, fontSize: '12px', color: '#6b7280', marginBottom: '10px', letterSpacing: '0.05em' }}>WEEK {i+1}</div>
+                                        <p style={{ fontSize: '14px', fontWeight: 600, color: '#111827', lineHeight: 1.5 }}>{task}</p>
                                     </div>
                                 ))}
                             </div>
@@ -236,9 +236,9 @@ const BlueprintView = () => {
                         <div className="blueprint-card">
                             <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Architecture</h3>
                             {blueprint.recommended_tech_stack && Object.entries(blueprint.recommended_tech_stack).filter(([k]) => k !== 'reasoning').map(([key, val]) => (
-                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f3f4f6' }}>
-                                    <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase' }}>{key}</span>
-                                    <span style={{ fontSize: '14px', fontWeight: 700 }}>{val}</span>
+                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #f3f4f6' }}>
+                                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{key}</span>
+                                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#000' }}>{val}</span>
                                 </div>
                             ))}
                         </div>

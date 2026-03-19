@@ -177,9 +177,11 @@ const HistoryView = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                     <div>
-                        <Link to="/dashboard" style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontWeight: 700, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none' }}><ArrowLeft size={16}/> DASHBOARD</Link>
+                    <div>
+                        <Link to="/dashboard" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> DASHBOARD</Link>
                         <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1 }}>{blueprint.title}</h1>
-                        <p style={{ fontSize: '18px', color: '#6b7280', marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
+                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
+                    </div>
                     </div>
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <button 
@@ -216,9 +218,9 @@ const HistoryView = () => {
                                 <div style={{ color: '#10b981', fontWeight: 700, fontSize: '12px', marginBottom: '16px' }}>MUST HAVE FEATURES</div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     {(blueprint.core_features?.must_have || []).map((f, i) => (
-                                        <div key={i} style={{ display: 'flex', gap: '12px', background: '#f9fafb', padding: '16px', borderRadius: '12px' }}>
+                                        <div key={i} style={{ display: 'flex', gap: '12px', background: '#f9fafb', padding: '16px', borderRadius: '12px', border: '1px solid #f3f4f6' }}>
                                             <Check size={18} color="#10b981" style={{ flexShrink: 0 }} />
-                                            <span style={{ fontSize: '15px', fontWeight: 500 }}>{f}</span>
+                                            <span style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>{f}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -232,9 +234,9 @@ const HistoryView = () => {
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 {Object.entries(blueprint.roadmap_4_weeks || {}).map(([week, task], i) => (
-                                    <div key={week} style={{ padding: '20px', background: '#f9fafb', borderRadius: '16px' }}>
-                                        <div style={{ fontWeight: 800, fontSize: '12px', color: '#9ca3af', marginBottom: '8px' }}>WEEK {i+1}</div>
-                                        <p style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.5 }}>{task}</p>
+                                    <div key={week} style={{ padding: '20px', background: '#f9fafb', borderRadius: '16px', border: '1px solid #f3f4f6' }}>
+                                        <div style={{ fontWeight: 800, fontSize: '12px', color: '#6b7280', marginBottom: '10px', letterSpacing: '0.05em' }}>WEEK {i+1}</div>
+                                        <p style={{ fontSize: '14px', fontWeight: 600, color: '#111827', lineHeight: 1.5 }}>{task}</p>
                                     </div>
                                 ))}
                             </div>

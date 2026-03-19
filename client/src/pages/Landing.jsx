@@ -98,12 +98,15 @@ const Landing = () => {
                     display: inline-flex;
                     align-items: center;
                     gap: 8px;
-                    padding: 8px 16px;
+                    padding: 6px 16px;
                     background: #f3f4f6;
+                    border: 1px solid #e5e7eb;
                     border-radius: 100px;
-                    font-size: 13px;
-                    font-weight: 600;
+                    font-size: 12px;
+                    font-weight: 700;
                     margin-bottom: 32px;
+                    color: #000;
+                    letter-spacing: 0.02em;
                 }
                 .nav-dot {
                     width: 8px;
@@ -210,15 +213,15 @@ const Landing = () => {
                         }}>
                             {f.icon}
                         </div>
-                        <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{f.title}</h3>
-                        <p style={{ fontSize: '15px', color: '#6b7280', lineHeight: 1.6 }}>{f.desc}</p>
+                        <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px', color: '#000' }}>{f.title}</h3>
+                        <p style={{ fontSize: '15px', color: '#4b5563', fontWeight: 500, lineHeight: 1.6 }}>{f.desc}</p>
                     </motion.div>
                 ))}
             </motion.section>
 
             {/* Footer */}
-            <footer style={{ padding: '60px 5%', borderTop: '1px solid #f3f4f6', textAlign: 'center' }}>
-                <div style={{ fontSize: '24px', fontWeight: 800, marginBottom: '24px' }}>Lyf —)</div>
+            <footer style={{ padding: '80px 5% 60px', borderTop: '1px solid #f3f4f6', textAlign: 'center' }}>
+                <div style={{ fontSize: '28px', fontWeight: 900, marginBottom: '32px', letterSpacing: '-0.05em' }}>Planora</div>
                 <div style={{ display: 'flex', gap: '32px', justifyContent: 'center', color: '#6b7280', fontSize: '14px', fontWeight: 500 }}>
                     <span>Product</span>
                     <span>Company</span>

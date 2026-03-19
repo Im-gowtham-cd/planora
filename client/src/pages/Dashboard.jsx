@@ -113,9 +113,10 @@ const Dashboard = () => {
                     background: #f3f4f6;
                     border-radius: 100px;
                     font-size: 11px;
-                    font-weight: 700;
-                    color: #4b5563;
+                    font-weight: 800;
+                    color: #111827;
                     text-transform: uppercase;
+                    letter-spacing: 0.05em;
                 }
                 .badge-success {
                     padding: 4px 12px;
@@ -181,7 +182,7 @@ const Dashboard = () => {
                         </div>
                         <div>
                             <div style={{ fontSize: '18px', fontWeight: 700 }}>New Project Blueprint</div>
-                            <div style={{ fontSize: '14px', opacity: 0.7 }}>Generate technical architecture in seconds</div>
+                            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>Generate technical architecture in seconds</div>
                         </div>
                     </div>
                     <ArrowRight size={24} />
@@ -217,7 +218,7 @@ const Dashboard = () => {
                                             <span style={{ fontSize: '13px', color: '#9ca3af' }}>{formatDate(item.createdAt)}</span>
                                         </div>
                                     </div>
-                                    <div style={{ color: '#e5e7eb' }}><ArrowRight size={20} /></div>
+                                    <div style={{ color: '#000' }}><ArrowRight size={20} /></div>
                                 </Link>
                             ))
                         )}

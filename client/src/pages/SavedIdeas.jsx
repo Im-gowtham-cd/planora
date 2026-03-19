@@ -134,13 +134,13 @@ const SavedIdeas = () => {
                                         {idea.blueprint?.title || 'Untitled Project'}
                                     </h3>
                                     <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-                                        <span style={{ fontSize: '11px', fontWeight: 700, background: '#000', color: '#fff', padding: '4px 10px', borderRadius: '100px', textTransform: 'uppercase' }}>{idea.domain}</span>
-                                        <span style={{ fontSize: '11px', fontWeight: 700, background: '#f3f4f6', color: '#4b5563', padding: '4px 10px', borderRadius: '100px', textTransform: 'uppercase' }}>{idea.skillLevel}</span>
+                                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#000', color: '#fff', padding: '4px 12px', borderRadius: '100px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{idea.domain}</span>
+                                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#f3f4f6', color: '#111827', padding: '4px 12px', borderRadius: '100px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{idea.skillLevel}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f3f4f6', paddingTop: '16px', marginTop: 'auto' }}>
                                         <span style={{ fontSize: '12px', color: '#9ca3af', fontWeight: 600 }}>{new Date(idea.createdAt).toLocaleDateString()}</span>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '13px' }}>
-                                            OPEN <ChevronRight size={14} />
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '12px', color: '#000', letterSpacing: '0.05em' }}>
+                                            OPEN <ChevronRight size={16} />
                                         </div>
                                     </div>
                                 </motion.div>
