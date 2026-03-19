@@ -127,11 +127,18 @@ const GenerateIdea = () => {
     if (limitReached) {
         return (
             <div style={containerStyle}>
-                <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '80px 40px', background: '#f9fafb', borderRadius: '32px', border: '1px solid #f3f4f6' }}>
-                    <AlertTriangle size={48} color="#ef4444" style={{ marginBottom: '24px' }} />
-                    <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>Limit Reached</h2>
-                    <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '32px' }}>You've used all 5 free blueprints this week. Your limit resets in {daysLeft} days.</p>
-                    <Link to="/premium" className="btn-primary" style={{ textDecoration: 'none', padding: '16px 32px' }}>Upgrade to Unlimited</Link>
+                <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '100px 40px', background: '#f9fafb', borderRadius: '40px', border: '1px solid #f3f4f6', boxShadow: '0 20px 40px rgba(0,0,0,0.04)' }}>
+                    <div style={{ background: '#fef2f2', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
+                        <AlertTriangle size={40} color="#ef4444" />
+                    </div>
+                    <h2 style={{ fontSize: '32px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.04em' }}>Limit Reached</h2>
+                    <p style={{ color: '#4b5563', fontSize: '17px', marginBottom: '40px', lineHeight: 1.6, fontWeight: 500 }}>
+                        You've used all 5 free blueprints this week.<br/>
+                        Your limit resets in <span style={{ color: '#000', fontWeight: 800 }}>{daysLeft} days</span>.
+                    </p>
+                    <Link to="/premium" className="btn-primary" style={{ textDecoration: 'none', padding: '18px 48px', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+                        Upgrade for Unlimited <Sparkles size={18} />
+                    </Link>
                 </div>
             </div>
         );
@@ -141,33 +148,42 @@ const GenerateIdea = () => {
         <div className="modern-blueprint-page" style={containerStyle}>
             <style dangerouslySetInnerHTML={{ __html: `
                 .form-card {
-                    background: #f9fafb;
+                    background: #fff;
                     border: 1px solid #f3f4f6;
-                    border-radius: 32px;
+                    border-radius: 40px;
                     padding: 48px;
-                    max-width: 700px;
+                    width: 100%;
+                    max-width: 850px;
                     margin: 0 auto;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.03);
                 }
-                .option-btn {
-                    padding: 16px;
-                    border-radius: 16px;
+                 .option-btn {
+                    padding: 20px;
+                    border-radius: 20px;
                     background: #fff;
                     border: 1px solid #e5e7eb;
-                    font-weight: 600;
+                    font-weight: 700;
+                    font-size: 15px;
                     cursor: pointer;
-                    transition: all 0.2s ease;
+                    transition: all 0.3s cubic-bezier(0.2, 1, 0.2, 1);
                     color: #4b5563;
+                    text-align: center;
+                }
+                .option-btn:hover {
+                    border-color: #000;
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
                 }
                 .option-btn.active {
                     background: #000;
                     color: #fff;
                     border-color: #000;
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
                 }
                 .blueprint-card {
                     background: #fff;
                     border: 1px solid #f3f4f6;
                     border-radius: 24px;
-                    padding: 32px;
                     margin-bottom: 24px;
                     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
                 }
@@ -208,31 +224,50 @@ const GenerateIdea = () => {
                         exit={{ opacity: 0, scale: 0.98 }}
                         className="form-card"
                     >
-                        <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '8px', letterSpacing: '-0.04em' }}>New Blueprint</h1>
-                        <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '40px' }}>AI-driven technical strategy in seconds.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(350px, 1.2fr) minmax(280px, 1fr)', gap: '48px', marginBottom: '40px', alignItems: 'start' }}>
+                            {/* Left Column: Domain */}
+                            <div>
+                                <label style={{ fontWeight: 800, fontSize: '11px', color: '#6b7280', display: 'block', marginBottom: '20px', letterSpacing: '0.12em' }}>CHOOSE DOMAIN</label>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                                    {domains.map(d => (
+                                        <button key={d} className={`option-btn ${formData.domain === d ? 'active' : ''}`} style={{ padding: '16px 12px', fontSize: '13px' }} onClick={() => setFormData({ ...formData, domain: d })}>{d}</button>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            {/* Right Column: Other Configs */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                                <div>
+                                    <label style={{ fontWeight: 800, fontSize: '11px', color: '#6b7280', display: 'block', marginBottom: '16px', letterSpacing: '0.12em' }}>EXPERIENCE LEVEL</label>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                                        {levels.map(l => (
+                                            <button key={l} className={`option-btn ${formData.skillLevel === l ? 'active' : ''}`} style={{ padding: '12px 0', fontSize: '12px' }} onClick={() => setFormData({ ...formData, skillLevel: l })}>{l}</button>
+                                        ))}
+                                    </div>
+                                </div>
 
-                        {error && <div style={{ background: '#fef2f2', color: '#dc2626', padding: '16px', borderRadius: '12px', marginBottom: '24px', fontSize: '14px', fontWeight: 600 }}>{error}</div>}
+                                <div>
+                                    <label style={{ fontWeight: 800, fontSize: '11px', color: '#6b7280', display: 'block', marginBottom: '16px', letterSpacing: '0.12em' }}>TEAM SIZE</label>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                                        {['Solo', 'Small', 'Startup'].map(s => (
+                                            <button key={s} className={`option-btn ${formData.teamSize === s ? 'active' : ''}`} style={{ padding: '12px 0', fontSize: '12px' }} onClick={() => setFormData({ ...formData, teamSize: s })}>{s}</button>
+                                        ))}
+                                    </div>
+                                </div>
 
-                        <div style={{ marginBottom: '32px' }}>
-                            <label style={{ fontWeight: 700, fontSize: '14px', color: '#9ca3af', display: 'block', marginBottom: '16px' }}>DOMAIN</label>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-                                {domains.map(d => (
-                                    <button key={d} className={`option-btn ${formData.domain === d ? 'active' : ''}`} onClick={() => setFormData({ ...formData, domain: d })}>{d}</button>
-                                ))}
+                                <div>
+                                    <label style={{ fontWeight: 800, fontSize: '11px', color: '#6b7280', display: 'block', marginBottom: '16px', letterSpacing: '0.12em' }}>PROJECT GOAL</label>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                                        {['Portfolio', 'SaaS', 'Learning'].map(p => (
+                                            <button key={p} className={`option-btn ${formData.purpose === p ? 'active' : ''}`} style={{ padding: '12px 0', fontSize: '12px' }} onClick={() => setFormData({ ...formData, purpose: p })}>{p}</button>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '40px' }}>
-                            <label style={{ fontWeight: 700, fontSize: '14px', color: '#9ca3af', display: 'block', marginBottom: '16px' }}>EXPERIENCE</label>
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                                {levels.map(l => (
-                                    <button key={l} className={`option-btn ${formData.skillLevel === l ? 'active' : ''}`} style={{ flex: 1 }} onClick={() => setFormData({ ...formData, skillLevel: l })}>{l}</button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <button className="btn-primary" onClick={handleGenerate} disabled={!formData.domain || !formData.skillLevel} style={{ width: '100%', padding: '18px', fontSize: '16px' }}>
-                            Generate Tech Stack <Sparkles size={18} style={{ marginLeft: '8px' }} />
+                        <button className="btn-primary" onClick={handleGenerate} disabled={!formData.domain || !formData.skillLevel} style={{ width: '100%', padding: '22px', fontSize: '17px', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', borderRadius: '24px' }}>
+                            Generate Tech Stack <Sparkles size={20} />
                         </button>
                     </motion.div>
                 ) : loading ? (
@@ -245,13 +280,15 @@ const GenerateIdea = () => {
                     <motion.div key="result" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '1100px', margin: '0 auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                             <div>
-                                <button onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontWeight: 700, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}><ArrowLeft size={16}/> RESET</button>
+                            <div>
+                                <button onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> RESET</button>
                                 <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1 }}>{blueprint.title}</h1>
-                                <p style={{ fontSize: '18px', color: '#6b7280', marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
+                                <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
                             </div>
-                            <div style={{ display: 'flex', gap: '12px' }}>
-                                <button onClick={handleGenerate} className="option-btn" style={{ padding: '12px 24px' }}><RefreshCw size={18}/></button>
-                                <button onClick={handleSave} className="btn-primary" style={{ padding: '12px 32px', fontSize: '14px' }}>{saving ? 'Saving...' : 'Save Blueprint'}</button>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                <button onClick={handleGenerate} className="option-btn" style={{ padding: '12px 16px', borderRadius: '12px' }} title="Regenerate"><RefreshCw size={18}/></button>
+                                <button onClick={handleSave} className="btn-primary" style={{ padding: '12px 32px', fontSize: '14px', fontWeight: 700 }}>{saving ? 'Saving...' : 'Save Blueprint'}</button>
                             </div>
                         </div>
 
@@ -311,11 +348,19 @@ const GenerateIdea = () => {
                                     ))}
                                 </div>
 
+                                <div className="blueprint-card" style={{ background: '#f5f3ff', borderColor: '#e0e7ff' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                                        <Sparkles size={18} color="#7c3aed" />
+                                        <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#1e1b4b' }}>Innovation Angle</h3>
+                                    </div>
+                                    <p style={{ fontSize: '14px', color: '#4338ca', fontWeight: 500, lineHeight: 1.6 }}>{blueprint.what_is_new || "This project implements a unique automated approach to problem-solving in this domain."}</p>
+                                </div>
+
                                 <div className="blueprint-card">
-                                    <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Architecture</h3>
+                                    <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Tech Stack</h3>
                                     {blueprint.recommended_tech_stack && Object.entries(blueprint.recommended_tech_stack).filter(([k]) => k !== 'reasoning').map(([key, val]) => (
                                         <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f3f4f6' }}>
-                                            <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase' }}>{key}</span>
+                                            <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{key}</span>
                                             <span style={{ fontSize: '14px', fontWeight: 700 }}>{val}</span>
                                         </div>
                                     ))}

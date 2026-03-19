@@ -177,11 +177,10 @@ const HistoryView = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                     <div>
-                    <div>
-                        <Link to="/dashboard" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> DASHBOARD</Link>
-                        <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1 }}>{blueprint.title}</h1>
-                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
-                    </div>
+                        <Link to="/dashboard" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> Back to Dashboard</Link>
+                        <div style={{ display: 'inline-flex', padding: '4px 12px', background: '#f3f4f6', borderRadius: '6px', fontSize: '11px', fontWeight: 800, color: '#6b7280', marginBottom: '16px', letterSpacing: '0.05em' }}>HISTORY</div>
+                        <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1.1 }}>{blueprint.title}</h1>
+                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '750px', lineHeight: 1.6 }}>{blueprint.problem_statement}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <button 
@@ -259,6 +258,24 @@ const HistoryView = () => {
                                     <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '100px' }}>
                                         <div style={{ width: `${(m.score || 0)*10}%`, height: '100%', background: m.color, borderRadius: '100px' }} />
                                     </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="blueprint-card" style={{ background: '#f3f4f6', border: 'none' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                                <Sparkles size={18} color="#000" />
+                                <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Innovation Angle</h3>
+                            </div>
+                            <p style={{ fontSize: '14px', color: '#4b5563', fontWeight: 500, lineHeight: 1.6 }}>{blueprint.what_is_new || "This architecture leverages automated scaling and predictive analysis to reduce operational overhead compared to traditional implementations."}</p>
+                        </div>
+
+                        <div className="blueprint-card">
+                            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Recommended Stack</h3>
+                            {blueprint.recommended_tech_stack && Object.entries(blueprint.recommended_tech_stack).filter(([k]) => k !== 'reasoning').map(([key, val]) => (
+                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #f3f4f6' }}>
+                                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{key}</span>
+                                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#000' }}>{val}</span>
                                 </div>
                             ))}
                         </div>

@@ -102,7 +102,6 @@ const BlueprintView = () => {
         return (
             <div style={containerStyle}>
                 <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '80px 40px', background: '#f9fafb', borderRadius: '32px', border: '1px solid #f3f4f6' }}>
-                    <AlertTriangle size={48} color="#ef4444" style={{ marginBottom: '24px' }} />
                     <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>Error</h2>
                     <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '32px' }}>{error || 'Blueprint not found'}</p>
                     <Link to="/saved" className="btn-primary" style={{ textDecoration: 'none', padding: '16px 32px' }}>Back to Library</Link>
@@ -156,9 +155,10 @@ const BlueprintView = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                     <div>
-                        <Link to="/saved" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> LIBRARY</Link>
-                        <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1 }}>{blueprint.title}</h1>
-                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '700px' }}>{blueprint.problem_statement}</p>
+                        <Link to="/saved" style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontWeight: 800, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textDecoration: 'none', letterSpacing: '0.05em' }}><ArrowLeft size={16}/> Back to Library</Link>
+                        <div style={{ display: 'inline-flex', padding: '4px 12px', background: '#ecfdf5', borderRadius: '6px', fontSize: '11px', fontWeight: 800, color: '#059669', marginBottom: '16px', letterSpacing: '0.05em' }}>SAVED</div>
+                        <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1.1 }}>{blueprint.title}</h1>
+                        <p style={{ fontSize: '18px', color: '#4b5563', fontWeight: 500, marginTop: '16px', maxWidth: '750px', lineHeight: 1.6 }}>{blueprint.problem_statement}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <button onClick={handleDelete} className="option-btn" style={{ padding: '12px 24px', color: '#ef4444', borderColor: '#fee2e2' }}><Trash2 size={18}/></button>
@@ -176,23 +176,11 @@ const BlueprintView = () => {
                                 <div style={{ color: '#10b981', fontWeight: 700, fontSize: '12px', marginBottom: '16px' }}>MUST HAVE FEATURES</div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     {(blueprint.core_features?.must_have || []).map((f, i) => (
-                                        <div key={i} style={{ display: 'flex', gap: '12px', background: '#f9fafb', padding: '16px', borderRadius: '12px' }}>
+                                        <div key={i} style={{ display: 'flex', gap: '12px', background: '#f9fafb', padding: '16px', borderRadius: '12px', border: '1px solid #f3f4f6' }}>
                                             <Check size={18} color="#10b981" style={{ flexShrink: 0 }} />
-                                            <span style={{ fontSize: '15px', fontWeight: 500 }}>{f}</span>
+                                            <span style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>{f}</span>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                                <div>
-                                    <div style={{ color: '#2563eb', fontWeight: 800, fontSize: '12px', marginBottom: '12px', letterSpacing: '0.05em' }}>SHOULD HAVE</div>
-                                    {(blueprint.core_features?.should_have || []).map((f, i) => (
-                                        <div key={i} style={{ fontSize: '14px', color: '#111827', fontWeight: 500, marginBottom: '8px' }}>• {f}</div>
-                                    ))}
-                                </div>
-                                <div>
-                                    <div style={{ color: '#7c3aed', fontWeight: 800, fontSize: '12px', marginBottom: '12px', letterSpacing: '0.05em' }}>INNOVATION</div>
-                                    <p style={{ fontSize: '14px', color: '#111827', fontWeight: 500, lineHeight: 1.5 }}>{blueprint.what_is_new}</p>
                                 </div>
                             </div>
                         </div>
@@ -233,8 +221,16 @@ const BlueprintView = () => {
                             ))}
                         </div>
 
+                        <div className="blueprint-card" style={{ background: '#f3f4f6', border: 'none' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                                <Sparkles size={18} color="#000" />
+                                <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Innovation Angle</h3>
+                            </div>
+                            <p style={{ fontSize: '14px', color: '#4b5563', fontWeight: 500, lineHeight: 1.6 }}>{blueprint.what_is_new || "This architecture leverages automated scaling and predictive analysis to reduce operational overhead compared to traditional implementations."}</p>
+                        </div>
+
                         <div className="blueprint-card">
-                            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Architecture</h3>
+                            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>Recommended Stack</h3>
                             {blueprint.recommended_tech_stack && Object.entries(blueprint.recommended_tech_stack).filter(([k]) => k !== 'reasoning').map(([key, val]) => (
                                 <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #f3f4f6' }}>
                                     <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{key}</span>
