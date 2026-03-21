@@ -2,7 +2,7 @@ name: Planora CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
 
 jobs:
   build:
