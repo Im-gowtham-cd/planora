@@ -53,3 +53,7 @@ CMD ["npm", "start"]
 
 - **Tag**: docker tag planora-server:latest 232420921471.dkr.ecr.us-east-1.amazonaws.com/planora-server
 - **Push**: docker push 232420921471.dkr.ecr.us-east-1.amazonaws.com/planora-server
+
+## ECR Image List
+
+- **List Image**: aws ecr list-images --repository-name planora-server
