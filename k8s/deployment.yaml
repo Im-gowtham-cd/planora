@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planora-backend
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: planora
+
+  template:
+    metadata:
+      labels:
+        app: planora
+
+    spec:
+      containers:
+      - name: backend
+        image: gowthamcd/planora-backend
+        ports:
+        - containerPort: 5000
+
+        env:
+        - name: PORT
+          value: "5000"
+
+        - name: GROQ_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: planora-secrets   # ⚠️ FIXED NAME
+              key: GROQ_API_KEY
+
+        - name: GROQ_MODEL
+          valueFrom:
+            secretKeyRef:
+              name: planora-secrets
+              key: GROQ_MODEL
+
+        - name: FIREBASE_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: planora-secrets
+              key: FIREBASE_PROJECT_ID
+
+        - name: FIREBASE_CLIENT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: planora-secrets
+              key: FIREBASE_CLIENT_EMAIL
+
+        - name: FIREBASE_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: planora-secrets
+              key: FIREBASE_PRIVATE_KEY
