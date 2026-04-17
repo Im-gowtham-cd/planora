@@ -90,3 +90,139 @@ npm run dev
 4. **Result**: Verify you get a structured blueprint.
 5. **Fresher Mode**: Try "Fresher" level to see the "Learning Path" section.
 6. **Save**: Click "Save Blueprint" and check "Saved" page.
+
+
+# Sakura Theme Redesign — Planora
+
+Full UI/UX overhaul to a **Sakura (cherry blossom)** aesthetic with scroll-jacked horizontal animation, parallax effects, floating petal particles, upgraded typography, and rich icons throughout the app.
+
+---
+
+## Color Palette & Typography
+
+### Sakura Colors
+| Token | Value | Usage |
+|---|---|---|
+| `--sakura-petal` | `#FFB7C5` | Primary accents, buttons |
+| `--sakura-deep` | `#C0576B` | Active states, hover emphasis |
+| `--sakura-blush` | `#FDE8EE` | Card backgrounds |
+| `--sakura-mist` | `#FFF0F5` | Page background |
+| `--sakura-bark` | `#4A2030` | Headlines, dark text |
+| `--sakura-leaf` | `#7B9E6B` | Success states / accent |
+| `--sakura-sky` | `#F9E8F0` | Soft section fills |
+| `--glass-sakura` | `rgba(255,183,197,0.15)` | Glass card backgrounds |
+
+### Fonts
+- **Display / Hero**: `Cormorant Garamond` (serif, elegant — imported from Google Fonts)
+- **Body / UI**: `DM Sans` (clean modern sans-serif)
+- **Mono**: `JetBrains Mono` (code blocks)
+
+---
+
+## Proposed Changes
+
+### 1. Global Design System
+
+#### [MODIFY] `index.css`
+- Replace entire CSS variable system with Sakura palette
+- Add `@import` for `Cormorant Garamond`, `DM Sans`, `JetBrains Mono`
+- Add floating sakura petal `@keyframes` animation (drift + rotate)
+- Add `@keyframes sakuraFall` for background petal particles
+- Add horizontal scroll hijack CSS (`.scroll-section`, `.h-container`, `.h-panel`)
+- Add parallax utility classes
+- Update all utility classes (`.btn-primary`, `.glass-card`, `.input-field`, etc.)
+- Add scrollbar in sakura pink tones
+
+---
+
+### 2. Navbar
+
+#### [MODIFY] `Navbar.jsx`
+- Background: `rgba(255,240,245,0.85)` blur glass with pink border
+- Logo: Cormorant Garamond font + cherry blossom `🌸` icon / `Flower` lucide icon
+- Nav links: sakura pink hover underline animation
+- Active button: gradient `#FFB7C5 → #C0576B`
+- User avatar: sakura pink background
+- Mobile menu: sakura blush background
+
+---
+
+### 3. Landing Page (Major Overhaul)
+
+#### [MODIFY] `Landing.jsx`
+**Structure:**
+1. **Hero Section** — Full viewport with parallax floating petal canvas, Japanese-style large Cormorant headline, sakura gradient CTA button
+2. **Features Horizontal Scroll Section** — Scroll-hijacked horizontal panel animation (adapted from provided code) showing 4 feature panels, each with a full-sakura-card design
+3. **Social Proof / Stats** — Parallax fade-in section
+4. **Footer** — Sakura-themed
+
+**Animations Added:**
+- Floating petal canvas (JS-generated SVG petals that drift across hero)
+- Horizontal hijack on features (scroll → translateX)
+- Parallax depth on hero text elements (different scroll speeds)
+- Entrance animations via Framer Motion
+
+---
+
+### 4. Dashboard
+
+#### [MODIFY] `Dashboard.jsx`
+- Page background: `--sakura-mist` gradient
+- Stat cards: sakura blush glass with pink border glow
+- Quick action bar: sakura gradient (pink → deep rose) instead of black
+- History items: hover state with pink left-border accent
+- Badges: sakura tones
+- Progress bar: animated sakura pink fill
+
+---
+
+### 5. GenerateIdea
+
+#### [MODIFY] `GenerateIdea.jsx`
+- Form card: glassmorphism with `--glass-sakura` bg + pink border
+- Option buttons: active state → sakura gradient
+- Loading spinner: sakura pink border
+- Blueprint result cards: sakura-card style
+- Chat bubbles: user → sakura deep, AI → sakura blush
+- Code blocks: dark rose tint background
+
+---
+
+### 6. SavedIdeas
+
+#### [MODIFY] `SavedIdeas.jsx`
+- Page background: `--sakura-mist`
+- Idea cards: sakura blush with pink border on hover
+- Domain badges: sakura pink
+- Empty state: cherry blossom illustration via SVG inline
+- Search bar: sakura-styled with pink focus ring
+
+---
+
+## Animations Summary
+
+| Animation | Where | Technique |
+|---|---|---|
+| **Horizontal Scroll Hijack** | Landing Features section | `useEffect` scroll listener + `translateX` |
+| **Sakura Petal Fall** | Landing Hero background | Canvas/CSS `@keyframes` absolute positioned petals |
+| **Parallax Depth** | Landing Hero text layers | `scroll` → `translateY` at different rates |
+| **Entrance Fade-Up** | All pages | Framer Motion `initial/animate` |
+| **Float** | Feature icons | CSS `@keyframes float` |
+| **Glow Pulse** | CTA buttons | CSS `@keyframes` box-shadow pulse |
+| **Card Lift** | All cards hover | CSS `transform: translateY(-6px)` |
+
+---
+
+## Verification Plan
+
+### Automated
+- `npm run dev` in `/client` — confirm dev server starts
+- Check console for import errors
+
+### Manual Visual Check
+- Landing: hero parallax, petal animation, horizontal scroll features
+- Dashboard: sakura stat cards, pink progress bar
+- GenerateIdea: sakura option buttons, glassmorphism form card
+- SavedIdeas: card hover effects
+- Navbar: glass blur + sakura styling
+- Mobile responsive check (< 768px)

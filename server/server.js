@@ -13,6 +13,10 @@ const PORT = process.env.PORT || 5000;
 // Compression middleware
 app.use(compression());
 
+// Trust proxy — required when behind Vercel / ngrok / any reverse proxy
+// Fixes: ERR_ERL_UNEXPECTED_X_FORWARDED_FOR from express-rate-limit
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
@@ -33,11 +37,15 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS - configure with your frontend origin
+// CORS — allow Vercel frontend + local dev
 app.use(cors({
-  origin: ['https://plannorra.vercel.app'],
-  methods: ['GET', 'POST'],
-  credentials: true
+  origin: [
+    'https://plannorra.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:4173',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
 }));
 
 app.use(express.json());

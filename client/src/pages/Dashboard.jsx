@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, TrendingUp, Clock, Crown, ArrowRight, History, Heart, Share2 } from 'lucide-react';
+import { Sparkles, Clock, Crown, ArrowRight, BookMarked } from 'lucide-react';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
@@ -40,11 +40,11 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--gradient-page)' }}>
                 <div style={{
-                    width: '40px', height: '40px',
-                    border: '3px solid #f3f4f6',
-                    borderTop: '3px solid #000',
+                    width: '44px', height: '44px',
+                    border: '3px solid var(--glass-border)',
+                    borderTop: '3px solid var(--sakura-deep)',
                     borderRadius: '50%',
                     animation: 'spin-slow 1s linear infinite',
                 }} />
@@ -61,169 +61,245 @@ const Dashboard = () => {
         return new Date(ts._seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
-    const allBlueprints = [...history.map(h => ({ ...h, type: 'history' })), ...ideas.filter(i => !history.some(h => h.blueprint?.title === i.blueprint?.title)).map(i => ({ ...i, type: 'saved' }))].sort((a, b) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+    const allBlueprints = [
+        ...history.map(h => ({ ...h, type: 'history' })),
+        ...ideas.filter(i => !history.some(h => h.blueprint?.title === i.blueprint?.title)).map(i => ({ ...i, type: 'saved' }))
+    ].sort((a, b) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+
+    const firstName = currentUser?.email?.split('@')[0] || 'there';
 
     return (
-        <div className="modern-dashboard" style={{ 
-            fontFamily: "'Poppins', sans-serif",
-            backgroundColor: '#ffffff',
+        <div style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'var(--gradient-page)',
+            backgroundAttachment: 'fixed',
             minHeight: '100vh',
-            padding: '120px 5% 60px',
-            color: '#111827'
+            padding: '120px 5% 80px',
+            color: 'var(--text-primary)',
         }}>
             <style dangerouslySetInnerHTML={{ __html: `
-                .stat-card {
+                .dash-stat-card {
                     padding: 32px;
                     border-radius: 24px;
-                    background: #f9fafb;
-                    border: 1px solid #f3f4f6;
-                    transition: all 0.3s ease;
+                    background: rgba(255,255,255,0.78);
+                    border: 1.5px solid var(--glass-border);
+                    backdrop-filter: blur(20px);
+                    box-shadow: var(--shadow-card);
+                    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+                    font-family: var(--font-sans) !important;
                 }
-                .quick-action-bar {
-                    background: #000;
+                .dash-stat-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: var(--shadow-hover);
+                    border-color: var(--glass-border-strong);
+                }
+                .dash-quick-action {
+                    background: var(--gradient-sakura);
                     color: #fff;
                     padding: 32px 40px;
                     border-radius: 24px;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    margin-bottom: 60px;
+                    margin-bottom: 56px;
                     cursor: pointer;
-                    transition: transform 0.3s ease;
+                    transition: all 0.35s ease;
                     text-decoration: none;
+                    box-shadow: var(--shadow-btn);
+                    position: relative;
+                    overflow: hidden;
+                    font-family: var(--font-sans) !important;
                 }
-                .quick-action-bar:hover {
-                    transform: scale(1.01);
+                .dash-quick-action::before {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+                    opacity: 0;
+                    transition: opacity 0.3s;
                 }
-                .history-item {
+                .dash-quick-action:hover {
+                    transform: translateY(-3px) scale(1.01);
+                    box-shadow: 0 20px 50px rgba(192,87,107,0.40);
+                }
+                .dash-quick-action:hover::before { opacity: 1; }
+                .dash-history-item {
                     display: flex;
                     align-items: center;
-                    padding: 24px;
-                    border-bottom: 1px solid #f3f4f6;
-                    transition: background 0.2s ease;
+                    padding: 22px 24px;
+                    border-bottom: 1px solid rgba(244,167,185,0.15);
+                    transition: all 0.25s ease;
                     cursor: pointer;
                     text-decoration: none;
                     color: inherit;
+                    border-left: 3px solid transparent;
+                    font-family: var(--font-sans) !important;
                 }
-                .history-item:hover {
-                    background: #fdfdfd;
+                .dash-history-item:hover {
+                    background: var(--sakura-blush);
+                    border-left-color: var(--sakura-petal);
                 }
-                .badge-neutral {
-                    padding: 4px 12px;
-                    background: #f3f4f6;
+                .dash-badge-saved {
+                    padding: 3px 10px;
+                    background: var(--sakura-blush);
                     border-radius: 100px;
                     font-size: 11px;
                     font-weight: 800;
-                    color: #111827;
+                    color: var(--sakura-deep);
+                    border: 1px solid var(--glass-border);
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
+                    letter-spacing: 0.06em;
                 }
-                .badge-success {
-                    padding: 4px 12px;
-                    background: #d1fae5;
+                .dash-badge-domain {
+                    padding: 3px 10px;
+                    background: rgba(244,167,185,0.15);
                     border-radius: 100px;
                     font-size: 11px;
-                    font-weight: 700;
-                    color: #065f46;
+                    font-weight: 800;
+                    color: var(--sakura-bark);
                     text-transform: uppercase;
+                    letter-spacing: 0.06em;
                 }
-                .progress-container {
-                    height: 8px;
-                    background: #e5e7eb;
+                .progress-track {
+                    height: 10px;
+                    background: var(--glass-border);
                     border-radius: 100px;
                     overflow: hidden;
-                    margin: 16px 0;
+                    margin: 20px 0;
                 }
             ` }} />
 
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
                     style={{ marginBottom: '48px' }}
                 >
-                    <h1 style={{ fontSize: '36px', fontWeight: 800, marginBottom: '8px', letterSpacing: '-0.04em' }}>Dashboard</h1>
-                    <p style={{ color: '#6b7280', fontSize: '16px' }}>Managing projects for {currentUser?.email}</p>
+                    <div style={{ fontSize: '24px', marginBottom: '8px' }}>🌸</div>
+                    <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, marginBottom: '8px', letterSpacing: '-0.02em', color: 'var(--sakura-bark)' }}>
+                        Welcome back, {firstName}
+                    </h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '18px', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>
+                        Your project studio is ready for new visions.
+                    </p>
                 </motion.div>
 
-                {/* Main Stats */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '48px' }}>
-                    <motion.div className="stat-card" whileHover={{ y: -5 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', letterSpacing: '0.05em' }}>WEEKLY USAGE</span>
-                            <Clock size={18} color="#9ca3af" />
+                {/* Stats Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '56px' }}>
+                    <motion.div className="dash-stat-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.12em' }}>WEEKLY USAGE</span>
+                            <div style={{ width: '38px', height: '38px', background: 'var(--sakura-blush)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Clock size={19} color="var(--sakura-deep)" />
+                            </div>
                         </div>
-                        <div style={{ fontSize: '48px', fontWeight: 800 }}>{usage}<span style={{ color: '#e5e7eb', fontSize: '24px' }}>/{maxUsage}</span></div>
-                        <div className="progress-container">
-                            <motion.div 
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '64px', fontWeight: 700, lineHeight: 1, color: 'var(--sakura-bark)' }}>
+                            {usage}<span style={{ color: 'var(--glass-border-strong)', fontSize: '32px' }}>/{maxUsage}</span>
+                        </div>
+                        <div className="progress-track">
+                            <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${usagePercent}%` }}
-                                style={{ height: '100%', backgroundColor: '#000' }} 
+                                transition={{ duration: 1.2, delay: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                                style={{ height: '100%', background: 'var(--gradient-sakura)', borderRadius: '100px' }}
                             />
                         </div>
-                        <p style={{ fontSize: '13px', color: '#6b7280' }}>Reset in 3 days</p>
+                        <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 600 }}>Refreshes in 3 days</p>
                     </motion.div>
 
-                    <motion.div className="stat-card" whileHover={{ y: -5 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', letterSpacing: '0.05em' }}>CREDITS</span>
-                            <Crown size={18} color="#9ca3af" />
+                    <motion.div className="dash-stat-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.12em' }}>PLAN</span>
+                            <div style={{ width: '38px', height: '38px', background: 'var(--sakura-blush)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Crown size={19} color="var(--sakura-deep)" />
+                            </div>
                         </div>
-                        <div style={{ fontSize: '32px', fontWeight: 800 }}>{stats?.role === 'premium' ? 'Premium' : 'Free Tier'}</div>
-                        <p style={{ fontSize: '14px', color: '#6b7280', marginTop: '12px' }}>{stats?.role === 'premium' ? 'Unlimited access enabled' : 'UPGRADE TO REMOVE LIMITS'}</p>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '42px', fontWeight: 700, color: 'var(--sakura-bark)' }}>
+                            {stats?.role === 'premium' ? 'Premium 🌸' : 'Free Tier'}
+                        </div>
+                        <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginTop: '16px', fontWeight: 500 }}>
+                            {stats?.role === 'premium' ? 'Unlimited blueprints enabled' : 'Upgrade to remove limits'}
+                        </p>
+                        {stats?.role !== 'premium' && (
+                            <Link to="/premium" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '20px', fontSize: '14px', fontWeight: 800, color: 'var(--sakura-deep)', textDecoration: 'none', background: 'var(--sakura-blush)', padding: '8px 18px', borderRadius: '100px', border: '1.5px solid var(--glass-border)' }}>
+                                Crown Upgrade
+                            </Link>
+                        )}
+                    </motion.div>
+
+                    <motion.div className="dash-stat-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.12em' }}>SAVED</span>
+                            <div style={{ width: '38px', height: '38px', background: 'var(--sakura-blush)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <BookMarked size={19} color="var(--sakura-deep)" />
+                            </div>
+                        </div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '64px', fontWeight: 700, lineHeight: 1, color: 'var(--sakura-bark)' }}>
+                            {ideas.length}
+                        </div>
+                        <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginTop: '20px', fontWeight: 500 }}>Blueprints in your collection</p>
                     </motion.div>
                 </div>
 
                 {/* Quick Action */}
-                <Link to="/generate" className="quick-action-bar">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        <div style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Sparkles size={24} />
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+                    <Link to="/generate" className="dash-quick-action">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', position: 'relative', zIndex: 1 }}>
+                            <div style={{ width: '60px', height: '60px', background: 'rgba(255,255,255,0.2)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <Sparkles size={28} color="#fff" />
+                            </div>
+                            <div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '26px', fontWeight: 700, letterSpacing: '-0.01em' }}>New Project Blueprint</div>
+                                <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.85)', marginTop: '4px', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>Architect your next vision with AI</div>
+                            </div>
                         </div>
-                        <div>
-                            <div style={{ fontSize: '18px', fontWeight: 700 }}>New Project Blueprint</div>
-                            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>Generate technical architecture in seconds</div>
-                        </div>
-                    </div>
-                    <ArrowRight size={24} />
-                </Link>
+                        <ArrowRight size={28} color="#fff" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }} />
+                    </Link>
+                </motion.div>
 
-                {/* History Section */}
-                <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                        <h2 style={{ fontSize: '24px', fontWeight: 800 }}>Recent Blueprints</h2>
-                        <Link to="/saved" style={{ fontSize: '14px', fontWeight: 700, color: '#000', textDecoration: 'none' }}>View All</Link>
+                {/* Recent Blueprints */}
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+                        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', fontWeight: 700, color: 'var(--sakura-bark)', letterSpacing: '-0.01em' }}>Recent Blueprints</h2>
+                        <Link to="/saved" style={{ fontSize: '14px', fontWeight: 800, color: 'var(--sakura-deep)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            VIEW ALL <ArrowRight size={16} />
+                        </Link>
                     </div>
 
-                    <div style={{ background: '#fff', borderRadius: '24px', border: '1px solid #f3f4f6', overflow: 'hidden' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.78)', borderRadius: '28px', border: '1.5px solid var(--glass-border)', overflow: 'hidden', backdropFilter: 'blur(20px)', boxShadow: 'var(--shadow-card)' }}>
                         {allBlueprints.length === 0 ? (
-                            <div style={{ padding: '80px 40px', textAlign: 'center' }}>
-                                <History size={48} color="#e5e7eb" style={{ marginBottom: '24px' }} />
-                                <p style={{ color: '#9ca3af', fontWeight: 500 }}>No project history yet.</p>
+                            <div style={{ padding: '100px 40px', textAlign: 'center' }}>
+                                <div style={{ fontSize: '52px', marginBottom: '20px' }}>🌸</div>
+                                <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '18px', fontFamily: 'var(--font-sans)' }}>Your collection is currently empty.</p>
+                                <Link to="/generate" className="btn-primary" style={{ display: 'inline-flex', textDecoration: 'none', marginTop: '32px', padding: '16px 36px', fontSize: '16px' }}>
+                                    <Sparkles size={18} style={{ marginRight: '10px' }} /> CREATE BLUEPRINT
+                                </Link>
                             </div>
                         ) : (
-                            allBlueprints.slice(0, 5).map((item, i) => (
-                                <Link 
-                                    key={item.id} 
+                            allBlueprints.slice(0, 5).map((item) => (
+                                <Link
+                                    key={item.id}
                                     to={item.type === 'history' ? `/history/${item.id}` : `/blueprint/${item.id}`}
-                                    className="history-item"
+                                    className="dash-history-item"
                                 >
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                                            <span style={{ fontSize: '16px', fontWeight: 700 }}>{item.blueprint?.title || 'Untitled Project'}</span>
-                                            {item.type === 'saved' && <span className="badge-success">Saved</span>}
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                                            <span style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}>{item.blueprint?.title || 'Untitled Project'}</span>
+                                            {item.type === 'saved' && <span className="dash-badge-saved">Saved</span>}
                                         </div>
-                                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                                            <span className="badge-neutral">{item.domain}</span>
-                                            <span style={{ fontSize: '13px', color: '#9ca3af' }}>{formatDate(item.createdAt)}</span>
+                                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                            <span className="dash-badge-domain">{item.domain}</span>
+                                            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>{formatDate(item.createdAt)}</span>
                                         </div>
                                     </div>
-                                    <div style={{ color: '#000' }}><ArrowRight size={20} /></div>
+                                    <ArrowRight size={20} color="var(--sakura-petal)" style={{ flexShrink: 0, marginLeft: '16px' }} />
                                 </Link>
                             ))
                         )}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
