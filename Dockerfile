@@ -1,18 +1,13 @@
-FROM jenkins/jenkins:lts
+# Step 1: Build
+FROM node:20-alpine as build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-USER root
-
-# Install basic tools
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    docker.io
-
-# Install Node.js (IMPORTANT FIX)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
-
-# Give Jenkins access
-RUN usermod -aG docker jenkins
-
-USER jenkins
+# Step 2: Serve with Nginx
+FROM nginx:stable-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
