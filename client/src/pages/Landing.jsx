@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useScroll, useTransform } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Brain, Layers, Target, Zap, ArrowRight, Sparkles } from 'lucide-react';
 

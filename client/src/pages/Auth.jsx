@@ -1,8 +1,34 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight, Brain } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+/* ─── Floating Petal Background (Consistent with Landing) ─── */
+const PETALS = Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 10}s`,
+    duration: `${10 + Math.random() * 15}s`,
+    size: `${12 + Math.random() * 18}px`,
+    emoji: ['🌸', '🌸', '🌸', '🌹', '🪷'][Math.floor(Math.random() * 5)],
+}));
+
+const PetalBackground = () => (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+        {PETALS.map(p => (
+            <span key={p.id} className="petal" style={{
+                left: p.left,
+                top: '-60px',
+                fontSize: p.size,
+                animationDuration: p.duration,
+                animationDelay: p.delay,
+            }}>
+                {p.emoji}
+            </span>
+        ))}
+    </div>
+);
 
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -52,124 +78,138 @@ const Auth = () => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '24px',
-            backgroundColor: '#ffffff',
-            fontFamily: "'Poppins', sans-serif",
+            backgroundColor: 'var(--sakura-mist)',
+            fontFamily: 'var(--font-sans)',
+            position: 'relative',
+            overflow: 'hidden',
         }}>
+            {/* Background Decorations */}
+            <div style={{ position: 'absolute', width: '600px', height: '600px', background: 'var(--sakura-petal)', top: '-200px', right: '-150px', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.15, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', width: '400px', height: '400px', background: 'var(--sakura-deep)', bottom: '-100px', left: '-100px', borderRadius: '50%', filter: 'blur(100px)', opacity: 0.1, pointerEvents: 'none' }} />
+            
+            <PetalBackground />
+
             <motion.div 
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
                 style={{
                     width: '100%',
-                    maxWidth: '440px',
-                    padding: '48px',
-                    background: '#f9fafb',
+                    maxWidth: '460px',
+                    padding: '56px 48px',
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    backdropFilter: 'blur(24px)',
                     borderRadius: '32px',
-                    border: '1px solid #f3f4f6',
+                    border: '1.5px solid var(--glass-border)',
+                    boxShadow: 'var(--shadow-hover)',
+                    position: 'relative',
+                    zIndex: 1,
                 }}
             >
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-                    <div style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '20px',
-                        background: '#000',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 28px',
-                        boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+                <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+                    <motion.div 
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', damping: 12 }}
+                        style={{
+                            width: '72px',
+                            height: '72px',
+                            borderRadius: '22px',
+                            background: 'var(--gradient-sakura)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto 24px',
+                            boxShadow: 'var(--shadow-btn)',
+                        }}
+                    >
+                        <Brain size={36} color="#fff" />
+                    </motion.div>
+                    <h1 style={{ 
+                        fontFamily: 'var(--font-display)', 
+                        fontSize: '38px', 
+                        fontWeight: 700, 
+                        color: 'var(--sakura-bark)', 
+                        marginBottom: '10px', 
+                        letterSpacing: '-0.02em' 
                     }}>
-                        <Sparkles size={32} color="#fff" />
-                    </div>
-                    <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#111827', marginBottom: '12px', letterSpacing: '-0.05em' }}>
-                        {isLogin ? 'Welcome back' : 'Join Planora'}
+                        {isLogin ? 'Welcome back' : 'Create Account'}
                     </h1>
-                    <p style={{ fontSize: '15px', color: '#6b7280', fontWeight: 500 }}>
-                        {isLogin ? 'Enter your details to sign in' : 'Create an account to start building'}
+                    <p style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                        {isLogin ? 'Enter your details to sign in' : 'Start your project architecture journey'}
                     </p>
                 </div>
 
                 {error && (
-                    <div style={{
-                        padding: '16px 20px',
-                        borderRadius: '16px',
-                        background: '#fef2f2',
-                        border: '1px solid #fee2e2',
-                        color: '#b91c1c',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        marginBottom: '24px',
-                    }}>
-                        {error}
-                    </div>
+                    <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        style={{
+                            padding: '14px 20px',
+                            borderRadius: '14px',
+                            background: '#fff5f5',
+                            border: '1px solid #feb2b2',
+                            color: '#c53030',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            marginBottom: '28px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px'
+                        }}>
+                        <span style={{ fontSize: '18px' }}>⚠️</span> {error}
+                    </motion.div>
                 )}
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <label style={{ fontWeight: 800, fontSize: '12px', color: '#374151', marginLeft: '4px', letterSpacing: '0.05em' }}>EMAIL</label>
+                        <label style={{ fontWeight: 800, fontSize: '11px', color: 'var(--text-muted)', marginLeft: '4px', letterSpacing: '0.12em' }}>EMAIL ADDRESS</label>
                         <div style={{ position: 'relative' }}>
-                            <Mail size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                            <Mail size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: 'var(--sakura-petal)' }} />
                             <input
                                 type="email"
-                                placeholder="name@company.com"
+                                placeholder="name@domain.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                className="input-field"
                                 style={{
-                                    width: '100%',
-                                    padding: '18px 18px 18px 52px',
-                                    borderRadius: '18px',
-                                    border: '1px solid #e5e7eb',
-                                    background: '#ffffff',
-                                    fontSize: '15px',
-                                    fontWeight: 500,
-                                    outline: 'none',
-                                    transition: 'all 0.2s ease',
+                                    paddingLeft: '52px',
                                 }}
-                                onFocus={e => { e.target.style.borderColor = '#000'; e.target.style.boxShadow = '0 0 0 4px rgba(0,0,0,0.03)'; }}
-                                onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }}
                             />
                         </div>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <label style={{ fontWeight: 800, fontSize: '12px', color: '#374151', marginLeft: '4px', letterSpacing: '0.05em' }}>PASSWORD</label>
+                        <label style={{ fontWeight: 800, fontSize: '11px', color: 'var(--text-muted)', marginLeft: '4px', letterSpacing: '0.12em' }}>PASSWORD</label>
                         <div style={{ position: 'relative' }}>
-                            <Lock size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                            <Lock size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: 'var(--sakura-petal)' }} />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                className="input-field"
                                 style={{
-                                    width: '100%',
-                                    padding: '18px 52px 18px 52px',
-                                    borderRadius: '18px',
-                                    border: '1px solid #e5e7eb',
-                                    background: '#ffffff',
-                                    fontSize: '15px',
-                                    fontWeight: 500,
-                                    outline: 'none',
-                                    transition: 'all 0.2s ease',
+                                    paddingLeft: '52px',
+                                    paddingRight: '52px',
                                 }}
-                                onFocus={e => { e.target.style.borderColor = '#000'; e.target.style.boxShadow = '0 0 0 4px rgba(0,0,0,0.03)'; }}
-                                onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }}
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', padding: '18px', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '16px' }}>
-                        {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
+                    <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', padding: '18px', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', fontSize: '16px' }}>
+                        {loading ? 'Authenticating...' : isLogin ? 'Sign In' : 'Get Started'}
                         <ArrowRight size={20} />
                     </button>
                 </form>
@@ -179,21 +219,21 @@ const Auth = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '20px',
-                    margin: '32px 0',
+                    margin: '36px 0',
                 }}>
-                    <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
-                    <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>or</span>
-                    <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
+                    <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }} />
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Social Sign In</span>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }} />
                 </div>
 
                 {/* Google Button */}
                 <button onClick={handleGoogle} disabled={loading} style={{
                     width: '100%',
                     padding: '16px',
-                    borderRadius: '18px',
+                    borderRadius: '100px',
                     background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    color: '#111827',
+                    border: '1.5px solid var(--glass-border)',
+                    color: 'var(--text-primary)',
                     fontSize: '15px',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -201,10 +241,11 @@ const Auth = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '12px',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+                    boxShadow: 'var(--shadow-soft)',
                 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#f9fafb'; e.currentTarget.style.borderColor = '#d1d5db'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--sakura-mist)'; e.currentTarget.style.borderColor = 'var(--sakura-petal)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.transform = 'none'; }}
                 >
                     <svg width="20" height="20" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.76h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -216,16 +257,21 @@ const Auth = () => {
                 </button>
 
                 {/* Toggle */}
-                <p style={{ textAlign: 'center', marginTop: '40px', fontSize: '14px', color: '#6b7280', fontWeight: 500 }}>
+                <p style={{ textAlign: 'center', marginTop: '40px', fontSize: '15px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                     {isLogin ? "New to Planora? " : "Already have an account? "}
                     <button
                         onClick={() => { setIsLogin(!isLogin); setError(''); }}
-                        style={{ color: '#111827', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 800, marginLeft: '4px', padding: '4px 0', borderBottom: '2px solid #000', transition: 'all 0.2s ease' }}
+                        style={{ color: 'var(--sakura-deep)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 800, marginLeft: '6px', padding: '4px 0', borderBottom: '2.5px solid var(--sakura-petal)', transition: 'all 0.3s ease' }}
                     >
                         {isLogin ? 'Create Account' : 'Sign In'}
                     </button>
                 </p>
             </motion.div>
+
+            {/* Footer Reference */}
+            <div style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)', fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>
+                🌸 POWERED BY PLANORA CORE
+            </div>
         </div>
     );
 };
