@@ -15,18 +15,16 @@ pipeline {
       }
     }
 
-    stage('Install Dependencies') {
-      steps {
-        dir('server') {
-          sh 'npm install'
+    stage('Install & Test') {
+      agent {
+        docker {
+          image 'node:20'
         }
       }
-    }
-
-    stage('Test Backend') {
       steps {
         dir('server') {
           sh 'node -v'
+          sh 'npm install'
           sh 'npm test || true'
         }
       }
@@ -34,23 +32,13 @@ pipeline {
 
     stage('Docker Build') {
       steps {
-        sh '''
-          docker build -t $IMAGE_NAME ./server
-        '''
+        sh 'docker build -t planora-backend ./server'
       }
     }
 
     stage('Deploy Container') {
       steps {
-        sh '''
-          docker stop $CONTAINER_NAME || true
-          docker rm $CONTAINER_NAME || true
-
-          docker run -d \
-            --name $CONTAINER_NAME \
-            -p 5000:5000 \
-            $IMAGE_NAME
-        '''
+        sh 'docker stop planora || true && docker rm planora || true && docker run -d --name planora -p 5000:5000 planora-backend'
       }
     }
   }
@@ -59,7 +47,6 @@ pipeline {
     success {
       echo "✅ Backend Deployed Successfully"
     }
-
     failure {
       echo "❌ Backend Deployment Failed"
     }
