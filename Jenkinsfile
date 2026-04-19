@@ -10,21 +10,18 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
+                // This pulls from your GitHub repo configured in the Job
                 checkout scm
             }
         }
 
-        stage('Install & Test') {
-            agent {
-                docker {
-                    image 'node:20'
-                }
-            }
+        stage('Install Dependencies') {
+            // Instead of using 'agent docker', we run inside the main agent
+            // because your Jenkins container now has root access.
             steps {
                 dir('server') {
-                    sh 'node -v'
-                    sh 'npm install'
-                    sh 'npm test || true'
+                    // Use a Docker container to run npm install so you don't need Node on Jenkins
+                    sh 'docker run --rm -v ${WORKSPACE}/server:/app -w /app node:20 npm install'
                 }
             }
         }
@@ -32,8 +29,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker --version'
-                    sh 'docker build -t planora-backend ./server'
+                    // This builds the image using your laptop's Docker engine
+                    sh "docker build -t ${IMAGE_NAME} ./server"
                 }
             }
         }
@@ -41,10 +38,11 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 script {
-                    sh '''
-            docker rm -f planora || true
-            docker run -d --name planora -p 5000:5000 planora-backend
-          '''
+                    // Removes old container if exists and starts new one
+                    sh """
+                        docker rm -f ${CONTAINER_NAME} || true
+                        docker run -d --name ${CONTAINER_NAME} -p 5000:5000 ${IMAGE_NAME}
+                    """
                 }
             }
         }
@@ -52,10 +50,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Backend Deployed Successfully'
+            echo '✅ Planora Backend Deployed Successfully'
         }
         failure {
-            echo '❌ Backend Deployment Failed'
+            echo '❌ Deployment Failed - Check Console Output'
         }
     }
 }
