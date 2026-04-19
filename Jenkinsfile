@@ -3,6 +3,8 @@ pipeline {
 
   environment {
     NODE_ENV = "production"
+    IMAGE_NAME = "planora-backend"
+    CONTAINER_NAME = "planora"
   }
 
   stages {
@@ -13,7 +15,7 @@ pipeline {
       }
     }
 
-    stage('Install Server Dependencies') {
+    stage('Install Dependencies') {
       steps {
         dir('server') {
           sh 'npm install'
@@ -21,15 +23,7 @@ pipeline {
       }
     }
 
-    stage('Install Client Dependencies') {
-      steps {
-        dir('client') {
-          sh 'npm install'
-        }
-      }
-    }
-
-    stage('Test Server') {
+    stage('Test Backend') {
       steps {
         dir('server') {
           sh 'node -v'
@@ -38,29 +32,24 @@ pipeline {
       }
     }
 
-    stage('Build Client (FIXED)') {
+    stage('Docker Build') {
       steps {
-        dir('client') {
-          sh '''
-            npm install
-            npx vite build
-          '''
-        }
+        sh '''
+          docker build -t $IMAGE_NAME ./server
+        '''
       }
     }
 
-    stage('Docker Build & Deploy') {
+    stage('Deploy Container') {
       steps {
         sh '''
-          docker build -t planora-backend ./server
-
-          docker stop planora || true
-          docker rm planora || true
+          docker stop $CONTAINER_NAME || true
+          docker rm $CONTAINER_NAME || true
 
           docker run -d \
-            --name planora \
+            --name $CONTAINER_NAME \
             -p 5000:5000 \
-            planora-backend
+            $IMAGE_NAME
         '''
       }
     }
@@ -68,11 +57,11 @@ pipeline {
 
   post {
     success {
-      echo "✅ Build Successful"
+      echo "✅ Backend Deployed Successfully"
     }
 
     failure {
-      echo "❌ Build Failed - Check logs"
+      echo "❌ Backend Deployment Failed"
     }
   }
 }
