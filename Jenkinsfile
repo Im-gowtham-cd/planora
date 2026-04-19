@@ -29,7 +29,7 @@ pipeline {
       }
     }
 
-    stage('Test Server (NO LONG RUN)') {
+    stage('Test Server') {
       steps {
         dir('server') {
           sh 'node -v'
@@ -38,20 +38,32 @@ pipeline {
       }
     }
 
-    stage('Build Client') {
+    stage('Build Client (FIXED)') {
       steps {
         dir('client') {
-          sh 'npm run build'
+          sh '''
+            npm install
+            npx vite build
+          '''
         }
       }
     }
 
-    stage('Docker Build (Backend)') {
+    stage('Docker Build & Deploy') {
       steps {
-        sh 'docker build -t planora-backend ./server'
+        sh '''
+          docker build -t planora-backend ./server
+
+          docker stop planora || true
+          docker rm planora || true
+
+          docker run -d \
+            --name planora \
+            -p 5000:5000 \
+            planora-backend
+        '''
       }
     }
-
   }
 
   post {
