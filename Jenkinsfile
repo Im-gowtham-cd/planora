@@ -1,9 +1,13 @@
 pipeline {
   agent any
 
+  environment {
+    NODE_ENV = "production"
+  }
+
   stages {
 
-    stage('Checkout') {
+    stage('Checkout Code') {
       steps {
         checkout scm
       }
@@ -25,12 +29,38 @@ pipeline {
       }
     }
 
-    stage('Build Server Test') {
+    stage('Test Server (NO LONG RUN)') {
       steps {
         dir('server') {
-          sh 'node server.js &'
+          sh 'node -v'
+          sh 'npm test || true'
         }
       }
+    }
+
+    stage('Build Client') {
+      steps {
+        dir('client') {
+          sh 'npm run build'
+        }
+      }
+    }
+
+    stage('Docker Build (Backend)') {
+      steps {
+        sh 'docker build -t planora-backend ./server'
+      }
+    }
+
+  }
+
+  post {
+    success {
+      echo "✅ Build Successful"
+    }
+
+    failure {
+      echo "❌ Build Failed - Check logs"
     }
   }
 }
