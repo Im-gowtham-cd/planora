@@ -65,6 +65,7 @@ const SavedIdeas = () => {
             backgroundAttachment: 'fixed',
             fontFamily: 'var(--font-sans)',
             padding: '120px 5% 80px',
+            position: 'relative',
         }}>
             <style dangerouslySetInnerHTML={{ __html: `
                 .saved-card {

@@ -76,6 +76,7 @@ const Dashboard = () => {
             minHeight: '100vh',
             padding: '120px 5% 80px',
             color: 'var(--text-primary)',
+            position: 'relative',
         }}>
             <style dangerouslySetInnerHTML={{ __html: `
                 .dash-stat-card {

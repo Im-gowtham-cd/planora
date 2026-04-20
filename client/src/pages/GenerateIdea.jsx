@@ -117,6 +117,7 @@ const GenerateIdea = () => {
         minHeight: '100vh',
         color: 'var(--text-primary)',
         padding: '120px 5% 80px',
+        position: 'relative',
     };
 
     /* ─── Limit Reached ─── */

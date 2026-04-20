@@ -109,7 +109,8 @@ const HistoryView = () => {
         backgroundColor: '#ffffff',
         minHeight: '100vh',
         color: '#111827',
-        padding: '120px 5% 60px'
+        padding: '120px 5% 60px',
+        position: 'relative'
     };
 
     if (loading) {

@@ -39,11 +39,7 @@ app.use(limiter);
 
 // CORS — allow Vercel frontend + local dev
 app.use(cors({
-  origin: [
-    'https://plannorra.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:4173',
-  ],
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
